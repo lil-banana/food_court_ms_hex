@@ -1,29 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity('Restaurant')
-export class RestaurantEntity {
-
+@Entity('Category')
+export class CategoryEntity {
     @PrimaryGeneratedColumn('uuid')
     id: string;
 
     @Column()
     name: string;
 
-    @Column({ unique: true })
-    nit: string;
-
     @Column()
-    address: string;
-
-    @Column()
-    telephoneNumber: string;
-
-    @Column()
-    logoUrl: string;
-
-    @Column({ unique: true })
-    ownerId: string;
-
+    description: string;
+    
     @CreateDateColumn()
     createdAt: Date;
 
