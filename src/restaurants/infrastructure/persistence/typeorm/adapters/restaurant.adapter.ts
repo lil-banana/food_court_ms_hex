@@ -18,7 +18,16 @@ export class RestaurantAdapter implements RestaurantPersistencePort {
             const restaurantEntity: RestaurantEntity = this.restaurantEntityMapper.toRestaurantEntity(restaurant);
             return this.restaurantEntityMapper.toRestaurant(await this.restaurantRepository.save(restaurantEntity));
         } catch (e) {
-            console.error('Error saving the restaurant: ', e.message);
+            console.error(e);
+            throw e;
+        }
+    }
+
+    async getRestaurantByOwner(ownerId: string): Promise<Restaurant> {
+        try {
+            return this.restaurantEntityMapper.toRestaurant(await this.restaurantRepository.findOneByOwner(ownerId));
+        } catch (e) {
+            console.error(e);
             throw e;
         }
     }

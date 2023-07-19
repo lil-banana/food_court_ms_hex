@@ -2,10 +2,14 @@ import { Module } from '@nestjs/common';
 import { RestaurantsModule } from './restaurants/restaurants.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RestaurantEntity } from './restaurants/infrastructure/persistence/typeorm/entities/restaurant.entity';
+import { DishesModule } from './dishes/dishes.module';
+import { CategoryEntity } from './dishes/infrastructure/persistence/typeorm/entities/category.entity';
+import { DishEntity } from './dishes/infrastructure/persistence/typeorm/entities/dish.entity';
 
 @Module({
     imports: [
         RestaurantsModule,
+        DishesModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
             host: 'localhost',
@@ -13,7 +17,7 @@ import { RestaurantEntity } from './restaurants/infrastructure/persistence/typeo
             username: 'root',
             password: 'root',
             database: 'test',
-            entities: [RestaurantEntity],
+            entities: [RestaurantEntity, CategoryEntity, DishEntity],
             synchronize: true,
         })
     ]

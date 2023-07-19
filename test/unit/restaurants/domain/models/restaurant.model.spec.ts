@@ -1,4 +1,3 @@
-import { InvalidArgumentError } from '../../../../../src/restaurants/domain/exceptions/invalidArgumentError.exception';
 import { Restaurant } from '../../../../../src/restaurants/domain/models/restaurant.model';
 import { OTHER_RESTAURANT, VALID_RESTAURANT } from '../../mocks/restaurant.mock';
 
