@@ -13,4 +13,8 @@ export class RestaurantRepository {
     save(restaurant: RestaurantEntity): Promise<RestaurantEntity> {
         return this.restaurantRepository.save(restaurant);
     }
+
+    findOneByOwner(ownerId: string): Promise<RestaurantEntity> {
+        return this.restaurantRepository.findOne({ where: { ownerId } });
+    }
 }

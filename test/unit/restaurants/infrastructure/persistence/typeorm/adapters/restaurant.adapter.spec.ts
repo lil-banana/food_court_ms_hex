@@ -11,7 +11,8 @@ describe('Restaurant Adapter', () => {
 
     beforeEach(() => {
         restaurantRepository = {
-            save: jest.fn()
+            save: jest.fn(),
+            findOneByOwner: jest.fn()
         };
         restaurantEntityMapper = {
             toRestaurant: jest.fn(),
@@ -43,7 +44,7 @@ describe('Restaurant Adapter', () => {
         });
 
         describe('Failure', () => {
-            it('should throw RestaurantAlreadyExistsException if restaurant already exists', async () => {
+            it('should throw an unexpected error', async () => {
                 const restaurant: Restaurant = VALID_RESTAURANT_NO_ID;
                 const restaurantEntity: RestaurantEntity = VALID_RESTAURANT_ENTITY_NO_ID;
 
@@ -53,6 +54,33 @@ describe('Restaurant Adapter', () => {
 
                 await expect(restaurantAdapter.saveRestaurant(restaurant)).rejects.toThrow(Error);
                 expect(restaurantEntityMapper.toRestaurantEntity).toHaveBeenCalledWith(restaurant);
+            });
+        });
+    });
+    
+    describe('getRestaurantByOwner', () => {
+        describe('Success', () => {
+            it('should save a new restaurant', async () => {
+                const expectedRestaurantEntity: RestaurantEntity = VALID_RESTAURANT_ENTITY;
+                const expectedRestaurant: Restaurant = VALID_RESTAURANT;
+
+                jest.spyOn(restaurantRepository, 'findOneByOwner').mockResolvedValue(expectedRestaurantEntity);
+                jest.spyOn(restaurantEntityMapper, 'toRestaurant').mockReturnValue(expectedRestaurant);
+
+                const result = await restaurantAdapter.getRestaurantByOwner(expectedRestaurantEntity.ownerId);
+
+                expect(result).toEqual(expectedRestaurant);
+                expect(restaurantRepository.findOneByOwner).toHaveBeenCalledWith(expectedRestaurantEntity.ownerId);
+                expect(restaurantEntityMapper.toRestaurant).toHaveBeenCalledWith(expectedRestaurantEntity);
+            });
+        });
+
+        describe('Failure', () => {
+            it('should throw an unexpected error', async () => {
+                jest.spyOn(console, 'error').mockImplementation(() => { });
+                jest.spyOn(restaurantRepository, 'findOneByOwner').mockRejectedValue(new Error());
+
+                await expect(restaurantAdapter.getRestaurantByOwner('id')).rejects.toThrow(Error);
             });
         });
     });

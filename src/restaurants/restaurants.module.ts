@@ -36,5 +36,6 @@ import { UsersApi } from './infrastructure/services/axios/apis/users.api';
             useClass: UsersService,
         }
     ],
+    exports: [RESTAURANT_PERSISTENCE_PORT]
 })
 export class RestaurantsModule {}
