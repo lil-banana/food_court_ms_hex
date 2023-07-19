@@ -27,7 +27,7 @@ describe('Restaurant Controller', () => {
         (restaurantController as any).restaurantResponseMapper = restaurantResponseMapper;
     });
 
-    describe('POST restaurants (create restaurant)', () => {
+    describe('POST /restaurants (create restaurant)', () => {
         describe('Success', () => {
             it('should save the restaurant and return a restaurant response', async () => {
                 const restaurantRequest: RestaurantRequest = VALID_RESTAURANT_REQUEST;
