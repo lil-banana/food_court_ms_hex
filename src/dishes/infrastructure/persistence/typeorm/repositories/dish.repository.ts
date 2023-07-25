@@ -13,4 +13,8 @@ export class DishRepository {
     save(dish: DishEntity): Promise<DishEntity> {
         return this.dishRepository.save(dish);
     }
+
+    findOneById(id: string): Promise<DishEntity> {
+        return this.dishRepository.findOneBy({ id });
+    }
 }

@@ -4,6 +4,7 @@ import { DishEntityMapper } from '../mappers/dishEntity.mapper';
 import { DishRepository } from '../repositories/dish.repository';
 import { Dish } from '../../../../domain/models/dish.model';
 import { DishEntity } from '../entities/dish.entity';
+import { DishNotFoundException } from '../../../exceptions/dishNotFound.exception';
 
 @Injectable()
 export class DishAdapter implements DishPersistencePort {
@@ -21,5 +22,13 @@ export class DishAdapter implements DishPersistencePort {
             console.error(e);
             throw e;
         }
+    }
+
+    async getDish(dishId: string): Promise<Dish> {
+        const dishEntity: DishEntity = await this.dishRepository.findOneById(dishId);
+        if (!dishEntity) {
+            throw new DishNotFoundException('Dish with given id does not exist');
+        }
+        return this.dishEntityMapper.toDish(dishEntity);
     }
 }

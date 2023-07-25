@@ -10,6 +10,8 @@ import { DishRepository } from './infrastructure/persistence/typeorm/repositorie
 import { DISH_PERSISTENCE_PORT } from './domain/repositories/dish.repository';
 import { CREATE_DISH_USE_CASE } from './domain/interfaces/createDish.interface';
 import { RestaurantsModule } from '../restaurants/restaurants.module';
+import { MODIFY_DISH_USE_CASE } from './domain/interfaces/modifyDish.interface';
+import { ModifyDishUseCase } from './application/usecases/modifyDish.usecase';
 
 @Module({
     imports: [
@@ -29,6 +31,10 @@ import { RestaurantsModule } from '../restaurants/restaurants.module';
         {
             provide: CREATE_DISH_USE_CASE,
             useClass: CreateDishUseCase,
+        },
+        {
+            provide: MODIFY_DISH_USE_CASE,
+            useClass: ModifyDishUseCase,
         }
     ]
 })

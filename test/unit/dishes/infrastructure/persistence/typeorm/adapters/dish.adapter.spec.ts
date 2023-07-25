@@ -1,6 +1,7 @@
 import { DishAdapter } from '../../../../../../../src/dishes/infrastructure/persistence/typeorm/adapters/dish.adapter';
 import { Dish } from '../../../../../../../src/dishes/domain/models/dish.model';
 import { DishEntity } from '../../../../../../../src/dishes/infrastructure/persistence/typeorm/entities/dish.entity';
+import { DishNotFoundException } from '../../../../../../../src/dishes/infrastructure/exceptions/dishNotFound.exception';
 import { VALID_DISH, VALID_DISH_NO_ID } from '../../../../mocks/dish.mock';
 import { VALID_DISH_ENTITY, VALID_DISH_ENTITY_NO_ID } from '../../../../mocks/dishEntity.mock';
 
@@ -11,7 +12,9 @@ describe('Dish Adapter', () => {
 
     beforeEach(() => {
         dishRepository = {
-            save: jest.fn()
+            save: jest.fn(),
+            findOneById: jest.fn(),
+            update: jest.fn()
         };
         dishEntityMapper = {
             toDish: jest.fn(),
@@ -43,7 +46,7 @@ describe('Dish Adapter', () => {
         });
 
         describe('Failure', () => {
-            it('should throw DishAlreadyExistsException if dish already exists', async () => {
+            it('should throw Error', async () => {
                 const dish: Dish = VALID_DISH_NO_ID;
                 const dishEntity: DishEntity = VALID_DISH_ENTITY_NO_ID;
 
@@ -53,6 +56,33 @@ describe('Dish Adapter', () => {
 
                 await expect(dishAdapter.saveDish(dish)).rejects.toThrow(Error);
                 expect(dishEntityMapper.toDishEntity).toHaveBeenCalledWith(dish);
+            });
+        });
+    });
+
+    describe('getDish', () => {
+        describe('Success', () => {
+            it('should get a dish with given id', async () => {
+                const expectedDishEntity: DishEntity = VALID_DISH_ENTITY;
+                const expectedDish: Dish = VALID_DISH;
+
+                jest.spyOn(dishRepository, 'findOneById').mockResolvedValue(expectedDishEntity);
+                jest.spyOn(dishEntityMapper, 'toDish').mockReturnValue(expectedDish);
+
+                const result = await dishAdapter.getDish(expectedDishEntity.id);
+
+                expect(result).toEqual(expectedDish);
+                expect(dishRepository.findOneById).toHaveBeenCalledWith(expectedDishEntity.id);
+                expect(dishEntityMapper.toDish).toHaveBeenCalledWith(expectedDishEntity);
+            });
+        });
+
+        describe('Failure', () => {
+            it('should throw DishNotFoundException if dish does not exists', async () => {
+                jest.spyOn(dishRepository, 'findOneById').mockReturnValue(null);
+
+                await expect(dishAdapter.getDish('id')).rejects.toThrow(DishNotFoundException);
+                expect(dishRepository.findOneById).toHaveBeenCalledWith('id');
             });
         });
     });

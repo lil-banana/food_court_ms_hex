@@ -1,4 +1,4 @@
-import { Inject, Body, Controller, Post, UseFilters } from '@nestjs/common';
+import { Inject, Body, Controller, Post, UseFilters, ValidationPipe } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { Restaurant } from 'src/restaurants/domain/models/restaurant.model';
 import { RestaurantRequest } from './dtos/restaurantRequest.dto';
@@ -20,7 +20,7 @@ export class RestaurantController {
 
     @Post()
     @ApiResponse({ status: 201, description: 'Creates a new restaurant', type: RestaurantResponse })
-    async saveRestaurant(@Body() restaurantRequest: RestaurantRequest): Promise<RestaurantResponse> {
+    async saveRestaurant(@Body(ValidationPipe) restaurantRequest: RestaurantRequest): Promise<RestaurantResponse> {
         const restaurant: Restaurant = this.restaurantRequestMapper.toRestaurant(restaurantRequest);
         const savedRestaurant: Restaurant = await this.createRestaurantUseCase.saveRestaurant(restaurant);
         return this.restaurantResponseMapper.toRestaurantResponse(savedRestaurant);
