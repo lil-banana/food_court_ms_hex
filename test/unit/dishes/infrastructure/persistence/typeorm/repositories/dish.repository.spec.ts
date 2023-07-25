@@ -8,7 +8,9 @@ describe('Dish Repository', () => {
 
     beforeEach(() => {
         entityRepository = {
-            save: jest.fn()
+            save: jest.fn(),
+            findOneBy: jest.fn(),
+            update: jest.fn()
         };
         dishRepository = new DishRepository(entityRepository);
     });
@@ -25,6 +27,19 @@ describe('Dish Repository', () => {
     
                 expect(result).toBe(expectedDishEntity);
                 expect(entityRepository.save).toHaveBeenCalledWith(dishEntity);
+            });
+        });
+
+        describe('findOneById', () => {
+            it('should find a dish with the given id', async () => {
+                const expectedDishEntity: DishEntity = VALID_DISH_ENTITY;
+
+                jest.spyOn(entityRepository, 'findOneBy').mockResolvedValue(expectedDishEntity);
+    
+                const result = await dishRepository.findOneById(expectedDishEntity.id);
+    
+                expect(result).toBe(expectedDishEntity);
+                expect(entityRepository.findOneBy).toHaveBeenCalledWith({ id: expectedDishEntity.id });
             });
         });
     });
