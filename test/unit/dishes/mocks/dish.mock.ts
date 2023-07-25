@@ -51,3 +51,20 @@ export const OTHER_DISH = new Dish(
     OTHER_CATEGORY,
     OTHER_RESTAURANT
 );
+
+export const VALID_DISH_PARTIAL = {
+    price: OTHER_DISH.price,
+    description: OTHER_DISH.description
+};
+
+export const VALID_DISH_PARTIAL_VOID = {};
+
+export const VALID_DISH_UPDATED = new Dish(
+    VALID_DISH.id,
+    VALID_DISH.name,
+    OTHER_DISH.price,
+    OTHER_DISH.description,
+    VALID_DISH.imageUrl,
+    VALID_DISH.category,
+    VALID_DISH.restaurant
+);
