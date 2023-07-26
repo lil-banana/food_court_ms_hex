@@ -14,7 +14,7 @@ export class DishRepository {
         return this.dishRepository.save(dish);
     }
 
-    findOneById(id: string): Promise<DishEntity> {
+    findOneById(id: string): Promise<DishEntity | null> {
         return this.dishRepository.findOneBy({ id });
     }
 }

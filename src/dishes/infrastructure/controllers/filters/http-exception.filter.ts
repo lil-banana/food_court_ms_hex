@@ -1,4 +1,4 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, BadRequestException } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { InvalidArgumentError } from '../../../domain/exceptions/invalidArgumentError.exception';
 import { DishNotFoundException } from '../../exceptions/dishNotFound.exception';
 
@@ -11,6 +11,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
         let status = HttpStatus.INTERNAL_SERVER_ERROR;
         let message = 'Internal server error';
         
+        console.error(exception);
+
         if (exception instanceof InvalidArgumentError) {
             status = HttpStatus.BAD_REQUEST;
             message = exception.message;
@@ -23,6 +25,9 @@ export class HttpExceptionFilter implements ExceptionFilter {
             if (Array.isArray(message)) {
                 message = message.join(', ');
             }
+        } else if (exception instanceof ForbiddenException) {
+            status = HttpStatus.FORBIDDEN;
+            message = 'Forbidden resource';
         }
 
         response.status(status).json({
