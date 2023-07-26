@@ -11,9 +11,11 @@ import { HttpModule } from '@nestjs/axios';
 import { USERS_SERVICE_PORT } from './domain/services/user.service';
 import { UsersService } from './infrastructure/services/axios/users.service';
 import { UsersApi } from './infrastructure/services/axios/apis/users.api';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
     imports: [
+        AuthModule,
         TypeOrmModule.forFeature([RestaurantEntity]),
         HttpModule
     ],

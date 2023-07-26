@@ -12,12 +12,14 @@ import { CREATE_DISH_USE_CASE } from './domain/interfaces/createDish.interface';
 import { RestaurantsModule } from '../restaurants/restaurants.module';
 import { MODIFY_DISH_USE_CASE } from './domain/interfaces/modifyDish.interface';
 import { ModifyDishUseCase } from './application/usecases/modifyDish.usecase';
+import { AuthModule } from 'src/auth/auth.module';
 
 @Module({
     imports: [
+        RestaurantsModule,
+        AuthModule,
         TypeOrmModule.forFeature([CategoryEntity, DishEntity]),
-        HttpModule,
-        RestaurantsModule
+        HttpModule
     ],
     controllers: [DishController],
     providers: [
