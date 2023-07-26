@@ -5,11 +5,13 @@ import { RestaurantEntity } from './restaurants/infrastructure/persistence/typeo
 import { DishesModule } from './dishes/dishes.module';
 import { CategoryEntity } from './dishes/infrastructure/persistence/typeorm/entities/category.entity';
 import { DishEntity } from './dishes/infrastructure/persistence/typeorm/entities/dish.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
     imports: [
         RestaurantsModule,
         DishesModule,
+        AuthModule,
         TypeOrmModule.forRoot({
             type: 'postgres',
             host: 'localhost',

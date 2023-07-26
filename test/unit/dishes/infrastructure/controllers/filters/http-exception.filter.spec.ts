@@ -1,4 +1,4 @@
-import { HttpStatus } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, HttpStatus } from '@nestjs/common';
 import { HttpExceptionFilter } from '../../../../../../src/dishes/infrastructure/controllers/filters/http-exception.filter';
 import { InvalidArgumentError } from '../../../../../../src/dishes/domain/exceptions/invalidArgumentError.exception';
 import { DishNotFoundException } from '../../../../../../src/dishes/infrastructure/exceptions/dishNotFound.exception';
@@ -18,6 +18,7 @@ describe('Http Exception Filter', () => {
             getResponse: jest.fn().mockReturnValue(response),
         };
         httpExceptionFilter = new HttpExceptionFilter();
+        jest.spyOn(console, 'error').mockImplementation(() => { });
     });
 
     describe('Success', () => {
@@ -43,6 +44,36 @@ describe('Http Exception Filter', () => {
     
             httpExceptionFilter.catch(exception, host);
     
+            expect(response.status).toHaveBeenCalledWith(expectedStatus);
+            expect(response.json).toHaveBeenCalledWith({
+                statusCode: expectedStatus,
+                timestamp: expect.any(String),
+                message: expectedMessage
+            });
+        });
+
+        it('should handle BadRequestException', () => {
+            const expectedMessage = 'Bad request message';
+            const exception = new BadRequestException([expectedMessage]);
+            const expectedStatus = HttpStatus.BAD_REQUEST;
+
+            httpExceptionFilter.catch(exception, host);
+
+            expect(response.status).toHaveBeenCalledWith(expectedStatus);
+            expect(response.json).toHaveBeenCalledWith({
+                statusCode: expectedStatus,
+                timestamp: expect.any(String),
+                message: expectedMessage
+            });
+        });
+
+        it('should handle ForbiddenException', () => {
+            const expectedMessage = 'Forbidden resource';
+            const exception = new ForbiddenException('message');
+            const expectedStatus = HttpStatus.FORBIDDEN;
+
+            httpExceptionFilter.catch(exception, host);
+
             expect(response.status).toHaveBeenCalledWith(expectedStatus);
             expect(response.json).toHaveBeenCalledWith({
                 statusCode: expectedStatus,

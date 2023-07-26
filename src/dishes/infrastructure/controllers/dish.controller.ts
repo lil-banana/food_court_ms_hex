@@ -1,4 +1,4 @@
-import { Inject, Body, Controller, Post, Patch, UseFilters, Param, ValidationPipe } from '@nestjs/common';
+import { Inject, Body, Controller, Post, Patch, UseFilters, Param, ValidationPipe, UseGuards, Request } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { Dish } from '../../domain/models/dish.model';
 import { DishRequest } from './dtos/dishRequest.dto';
@@ -10,6 +10,7 @@ import { DishIdDtoMapper } from './mappers/dishIdDto.mapper';
 import { IModifyDishUseCase, MODIFY_DISH_USE_CASE } from '../../domain/interfaces/modifyDish.interface';
 import { DishUpdate } from './dtos/dishUpdate.dto';
 import { DishUpdateMapper } from './mappers/dishUpdate.mapper';
+import { OwnerGuard } from '../../../auth/infrastructure/controllers/guards/owner.guard';
 
 @ApiTags('dishes')
 @Controller('dishes')
@@ -25,14 +26,16 @@ export class DishController {
     ) { }
 
     @Post()
+    @UseGuards(OwnerGuard)
     @ApiResponse({ status: 201, description: 'Creates a new dish', type: DishIdDto })
-    async saveDish(@Body(ValidationPipe) dishRequest: DishRequest): Promise<DishIdDto> {
+    async saveDish(@Body(ValidationPipe) dishRequest: DishRequest, @Request() request: any): Promise<DishIdDto> {
         const dish: Dish = this.dishRequestMapper.toDish(dishRequest);
-        const savedDish: Dish = await this.createDishUseCase.saveDish(dish, 'eb2c393d-b54c-435b-aea7-eb49317c3a6b');
+        const savedDish: Dish = await this.createDishUseCase.saveDish(dish, request.user.userId);
         return this.dishIdDtoMapper.toDishIdDto(savedDish);
     }
 
     @Patch(':id')
+    @UseGuards(OwnerGuard)
     @ApiResponse({ status: 200, description: 'Modifies the price and description of a dish' })
     async modifyDish(@Param('id') dishId: string, @Body(ValidationPipe) dishUpdate: DishUpdate): Promise<void> {
         const dish: Partial<Dish> = this.dishUpdateMapper.toDishPartial(dishUpdate);
