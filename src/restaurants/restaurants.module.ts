@@ -12,6 +12,8 @@ import { USERS_SERVICE_PORT } from './domain/services/user.service';
 import { UsersService } from './infrastructure/services/axios/users.service';
 import { UsersApi } from './infrastructure/services/axios/apis/users.api';
 import { AuthModule } from '../auth/auth.module';
+import { GetRestaurantsUseCase } from './application/usecases/getRestaurants.usecase';
+import { GET_RESTAURANTS_USE_CASE } from './domain/interfaces/getRestaurants.interface';
 
 @Module({
     imports: [
@@ -32,6 +34,10 @@ import { AuthModule } from '../auth/auth.module';
         {
             provide: CREATE_RESTAURANT_USE_CASE,
             useClass: CreateRestaurantUseCase,
+        },
+        {
+            provide: GET_RESTAURANTS_USE_CASE,
+            useClass: GetRestaurantsUseCase,
         },
         {
             provide: USERS_SERVICE_PORT,
