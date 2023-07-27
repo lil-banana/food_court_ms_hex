@@ -15,7 +15,8 @@ export class DishEntityMapper {
             dishEntity.description,
             dishEntity.imageUrl,
             this.categoryEntityMapper.toCategory(dishEntity.category),
-            this.restaurantEntityMapper.toRestaurant(dishEntity.restaurant)
+            this.restaurantEntityMapper.toRestaurant(dishEntity.restaurant),
+            dishEntity.active
         );
         return dish;
     }
@@ -29,6 +30,7 @@ export class DishEntityMapper {
         dishEntity.imageUrl = dish.imageUrl;
         dishEntity.category = this.categoryEntityMapper.toCategoryEntity(dish.category);
         dishEntity.restaurant = this.restaurantEntityMapper.toRestaurantEntity(dish.restaurant);
+        dishEntity.active = dish.active;
         return dishEntity;
     }
 }

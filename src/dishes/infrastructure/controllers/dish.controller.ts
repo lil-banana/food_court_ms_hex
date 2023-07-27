@@ -11,6 +11,7 @@ import { IModifyDishUseCase, MODIFY_DISH_USE_CASE } from '../../domain/interface
 import { DishUpdate } from './dtos/dishUpdate.dto';
 import { DishUpdateMapper } from './mappers/dishUpdate.mapper';
 import { OwnerGuard } from '../../../auth/infrastructure/controllers/guards/owner.guard';
+import { ACTIVATE_DEACTIVATE_DISH_USE_CASE, IActivateDeactivateDishUseCase } from '../../domain/interfaces/activateDeactivateDish.interface';
 
 @ApiTags('dishes')
 @Controller('dishes')
@@ -22,7 +23,8 @@ export class DishController {
 
     constructor(
         @Inject(CREATE_DISH_USE_CASE) private readonly createDishUseCase: ICreateDishUseCase,
-        @Inject(MODIFY_DISH_USE_CASE) private readonly modifyDishUseCase: IModifyDishUseCase
+        @Inject(MODIFY_DISH_USE_CASE) private readonly modifyDishUseCase: IModifyDishUseCase,
+        @Inject(ACTIVATE_DEACTIVATE_DISH_USE_CASE) private readonly activateDeactivateDishUseCase: IActivateDeactivateDishUseCase
     ) { }
 
     @Post()
@@ -40,5 +42,19 @@ export class DishController {
     async modifyDish(@Param('id') dishId: string, @Body(ValidationPipe) dishUpdate: DishUpdate): Promise<void> {
         const dish: Partial<Dish> = this.dishUpdateMapper.toDishPartial(dishUpdate);
         await this.modifyDishUseCase.modifyDish(dishId, dish);
+    }
+
+    @Patch('activate/:id')
+    @UseGuards(OwnerGuard)
+    @ApiResponse({ status: 200, description: 'Activates a dish' })
+    async activateDish(@Param('id') dishId: string, @Request() request: any): Promise<void> {
+        await this.activateDeactivateDishUseCase.activateDish(dishId, request.user.userId);
+    }
+
+    @Patch('deactivate/:id')
+    @UseGuards(OwnerGuard)
+    @ApiResponse({ status: 200, description: 'Deactivates a dish' })
+    async deactivateDish(@Param('id') dishId: string, @Request() request: any): Promise<void> {
+        await this.activateDeactivateDishUseCase.deactivateDish(dishId, request.user.userId);
     }
 }

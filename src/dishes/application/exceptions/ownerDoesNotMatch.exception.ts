@@ -1,0 +1,1 @@
+export class OwnerDoesNotMatchException extends Error {}
