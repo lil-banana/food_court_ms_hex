@@ -31,4 +31,14 @@ export class RestaurantAdapter implements RestaurantPersistencePort {
             throw e;
         }
     }
+
+    async getRestaurants(page: number, limit: number): Promise<Restaurant[]> {
+        try {
+            const skip = (page - 1) * limit; 
+            return this.restaurantEntityMapper.toRestaurantList(await this.restaurantRepository.findAll(skip, limit));
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
 }

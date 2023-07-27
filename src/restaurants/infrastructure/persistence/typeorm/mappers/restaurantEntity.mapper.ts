@@ -15,6 +15,10 @@ export class RestaurantEntityMapper {
         return restaurant;
     }
 
+    toRestaurantList(restaurantEntityList: RestaurantEntity[]): Restaurant[] {
+        return restaurantEntityList.map(restaurantEntity => this.toRestaurant(restaurantEntity));
+    }
+
     toRestaurantEntity(restaurant: Restaurant): RestaurantEntity {
         const restaurantEntity: RestaurantEntity = new RestaurantEntity();
         restaurantEntity.id = restaurant.id;
