@@ -33,6 +33,9 @@ export class DishEntity {
     @JoinColumn({ name: 'restaurantId' })
     restaurant: RestaurantEntity;
 
+    @Column()
+    active: boolean;
+
     @CreateDateColumn()
     createdAt: Date;
 

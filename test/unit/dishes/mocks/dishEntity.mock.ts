@@ -11,6 +11,7 @@ export const VALID_DISH_ENTITY: DishEntity = {
     imageUrl: VALID_DISH.imageUrl,
     category: SOUP_CATEGORY_ENTITY,
     restaurant: VALID_RESTAURANT_ENTITY,
+    active: false,
     createdAt: undefined,
     updatedAt: undefined
 }
@@ -23,6 +24,7 @@ export const VALID_DISH_ENTITY_NO_ID: DishEntity = {
     imageUrl: VALID_DISH.imageUrl,
     category: SOUP_CATEGORY_ENTITY,
     restaurant: VALID_RESTAURANT_ENTITY,
+    active: false,
     createdAt: undefined,
     updatedAt: undefined
 }

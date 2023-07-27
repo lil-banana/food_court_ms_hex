@@ -31,8 +31,11 @@ describe('Dish Model', () => {
         it('should update other values', () => {
             const dish: Dish = VALID_DISH;
             dish.restaurant = OTHER_DISH.restaurant;
+            dish.active = undefined;
+            dish.active = true;
 
             expect(dish.restaurant).toBe(OTHER_DISH.restaurant);
+            expect(dish.active).toBe(true);
         });
     });
 });

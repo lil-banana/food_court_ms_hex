@@ -12,6 +12,7 @@ describe('Dish Controller', () => {
     let dishController: DishController;
     let createDishUseCase: any;
     let modifyDishUseCase: any;
+    let activateDeactivateDishUseCase: any;
     let dishRequestMapper: any;
     let dishIdDtoMapper: any;
     let dishUpdateMapper: any;
@@ -23,6 +24,10 @@ describe('Dish Controller', () => {
         modifyDishUseCase = {
             modifyDish: jest.fn(),
         };
+        activateDeactivateDishUseCase = {
+            activateDish: jest.fn(),
+            deactivateDish: jest.fn()
+        };
         dishRequestMapper = {
             toDish: jest.fn(),
         };
@@ -32,7 +37,7 @@ describe('Dish Controller', () => {
         dishUpdateMapper = {
             toDishPartial: jest.fn(),
         };
-        dishController = new DishController(createDishUseCase, modifyDishUseCase);
+        dishController = new DishController(createDishUseCase, modifyDishUseCase, activateDeactivateDishUseCase);
         (dishController as any).dishRequestMapper = dishRequestMapper;
         (dishController as any).dishIdDtoMapper = dishIdDtoMapper;
         (dishController as any).dishUpdateMapper = dishUpdateMapper;
@@ -73,6 +78,30 @@ describe('Dish Controller', () => {
 
                 expect(dishUpdateMapper.toDishPartial).toHaveBeenCalledWith(dishUpdate);
                 expect(modifyDishUseCase.modifyDish).toHaveBeenCalledWith('id', dish);
+            });
+        });
+    });
+    
+    describe('PATCH /dishes/activate/:id (activates dish)', () => {
+        describe('Success', () => {
+            it('should activate the dish', async () => {
+                const request: any = { user: { userId : 'userid' } };
+
+                await dishController.activateDish('id', request);
+
+                expect(activateDeactivateDishUseCase.activateDish).toHaveBeenCalledWith('id', 'userid');
+            });
+        });
+    });
+    
+    describe('PATCH /dishes/deactivate/:id (deactivates dish)', () => {
+        describe('Success', () => {
+            it('should deactivate the dish', async () => {
+                const request: any = { user: { userId : 'userid' } };
+
+                await dishController.deactivateDish('id', request);
+
+                expect(activateDeactivateDishUseCase.deactivateDish).toHaveBeenCalledWith('id', 'userid');
             });
         });
     });

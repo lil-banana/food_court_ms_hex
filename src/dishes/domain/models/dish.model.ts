@@ -10,8 +10,9 @@ export class Dish {
     private readonly _imageUrl: string;
     private readonly _category: Category;
     private _restaurant: Restaurant;
+    private _active: boolean;
 
-    constructor(id: string, name: string, price: number, description: string, imageUrl: string, category: Category, restaurant: Restaurant) {
+    constructor(id: string, name: string, price: number, description: string, imageUrl: string, category: Category, restaurant: Restaurant, active?: boolean) {
         this._id = id;
         this._name = name;
         this._price = new DishPrice(price);
@@ -19,6 +20,7 @@ export class Dish {
         this._imageUrl = imageUrl;
         this._category = category;
         this._restaurant = restaurant;
+        this._active = active ?? false;
     }
 
     get id(): string {
@@ -59,5 +61,13 @@ export class Dish {
 
     set restaurant(restaurant: Restaurant) {
         this._restaurant = restaurant;
+    }
+
+    get active(): boolean {
+        return this._active;
+    }
+
+    set active(active: boolean) {
+        this._active = active ?? false;
     }
 }
