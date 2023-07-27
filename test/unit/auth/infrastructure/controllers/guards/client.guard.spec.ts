@@ -1,7 +1,7 @@
-import { OwnerGuard } from '../../../../../../src/auth/infrastructure/controllers/guards/owner.guard';
+import { ClientGuard } from '../../../../../../src/auth/infrastructure/controllers/guards/client.guard';
 
-describe('Owner Guard', () => {
-    let guard: OwnerGuard;
+describe('Client Guard', () => {
+    let guard: ClientGuard;
     let tokenService: any;
     let context: any;
     let request: any;
@@ -22,13 +22,13 @@ describe('Owner Guard', () => {
             getRequest: jest.fn()
         };
 
-        guard = new OwnerGuard(tokenService);
+        guard = new ClientGuard(tokenService);
     });
 
     describe('Success', () => {
-        it('should return true if the token is valid and contains the "owner" role', async () => {
+        it('should return true if the token is valid and contains the "client" role', async () => {
             jest.spyOn(context, 'getRequest').mockReturnValue(request);
-            jest.spyOn(tokenService, 'verifyToken').mockReturnValue({ role: 'owner' });
+            jest.spyOn(tokenService, 'verifyToken').mockReturnValue({ role: 'client' });
 
             const result = await guard.canActivate(context);
             expect(result).toBe(true);
@@ -51,9 +51,9 @@ describe('Owner Guard', () => {
             expect(result).toBe(false);
         });
 
-        it('should return false if token payload role is not owner', async () => {
+        it('should return false if token payload role is not client', async () => {
             jest.spyOn(context, 'getRequest').mockReturnValue(request);
-            jest.spyOn(tokenService, 'verifyToken').mockReturnValue({role: 'notOwner'});
+            jest.spyOn(tokenService, 'verifyToken').mockReturnValue({role: 'notClient'});
 
             const result = await guard.canActivate(context);
             expect(result).toBe(false);

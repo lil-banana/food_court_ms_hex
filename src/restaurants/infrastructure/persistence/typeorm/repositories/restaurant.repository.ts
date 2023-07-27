@@ -17,4 +17,14 @@ export class RestaurantRepository {
     findOneByOwner(ownerId: string): Promise<RestaurantEntity> {
         return this.restaurantRepository.findOne({ where: { ownerId } });
     }
+
+    findAll(skip: number, take: number): Promise<RestaurantEntity[]> {
+        return this.restaurantRepository.find({
+            skip,
+            take,
+            order: {
+                name: 'ASC',
+            }
+        });
+    }
 }

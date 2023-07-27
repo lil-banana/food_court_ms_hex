@@ -22,6 +22,17 @@ describe('Restaurant Entity Mapper', () => {
     });
   });
 
+  describe('toRestaurantList', () => {
+    it('should map RestaurantEntityList to RestaurantList', () => {
+      const restaurantEntityList: RestaurantEntity[] = [ VALID_RESTAURANT_ENTITY ];
+      const expectedRestaurantList: Restaurant[] = [ VALID_RESTAURANT ];
+
+      const restaurants = restaurantEntityMapper.toRestaurantList(restaurantEntityList);
+
+      expect(restaurants).toEqual(expectedRestaurantList);
+    });
+  });
+
   describe('toRestaurantEntity', () => {
     it('should map Restaurant to RestaurantEntity', () => {
       const restaurant: Restaurant = VALID_RESTAURANT_NO_ID;

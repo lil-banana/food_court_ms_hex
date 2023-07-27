@@ -10,7 +10,8 @@ describe('Restaurant Repository', () => {
     beforeEach(() => {
         entityRepository = {
             save: jest.fn(),
-            findOne: jest.fn()
+            findOne: jest.fn(),
+            find: jest.fn()
         };
         restaurantRepository = new RestaurantRepository(entityRepository);
     });
@@ -22,9 +23,9 @@ describe('Restaurant Repository', () => {
                 const expectedRestaurantEntity: RestaurantEntity = VALID_RESTAURANT_ENTITY;
 
                 jest.spyOn(entityRepository, 'save').mockResolvedValue(expectedRestaurantEntity);
-    
+
                 const result = await restaurantRepository.save(restaurantEntity);
-    
+
                 expect(result).toBe(expectedRestaurantEntity);
                 expect(entityRepository.save).toHaveBeenCalledWith(restaurantEntity);
             });
@@ -35,11 +36,24 @@ describe('Restaurant Repository', () => {
                 const expectedRestaurantEntity: RestaurantEntity = VALID_RESTAURANT_ENTITY;
 
                 jest.spyOn(entityRepository, 'findOne').mockResolvedValue(expectedRestaurantEntity);
-    
+
                 const result = await restaurantRepository.findOneByOwner(expectedRestaurantEntity.ownerId);
-    
+
                 expect(result).toBe(expectedRestaurantEntity);
                 expect(entityRepository.findOne).toHaveBeenCalledWith({ where: { ownerId: expectedRestaurantEntity.ownerId } });
+            });
+        });
+
+        describe('findAll', () => {
+            it('should get all the restaurants', async () => {
+                const expectedRestaurantEntityList: RestaurantEntity[] = [VALID_RESTAURANT_ENTITY];
+
+                jest.spyOn(entityRepository, 'find').mockResolvedValue(expectedRestaurantEntityList);
+
+                const result = await restaurantRepository.findAll(1, 2);
+
+                expect(result).toBe(expectedRestaurantEntityList);
+                expect(entityRepository.find).toHaveBeenCalledWith({ skip: 1, take: 2, order: { name: 'ASC' } });
             });
         });
     });

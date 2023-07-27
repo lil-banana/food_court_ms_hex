@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { RESTAURANT_PERSISTENCE_PORT, RestaurantPersistencePort } from '../../domain/repositories/restaurant.repository';
 import { ICreateRestaurantUseCase } from '../../domain/interfaces/createRestaurant.interface';
-import { Restaurant } from 'src/restaurants/domain/models/restaurant.model';
+import { Restaurant } from '../../../restaurants/domain/models/restaurant.model';
 import { USERS_SERVICE_PORT, UsersServicePort } from '../../domain/services/user.service';
 import { UserIsNotOwnerException } from '../exceptions/userIsNotOwner.exception';
 
