@@ -2,20 +2,27 @@ import { DishController } from '../../../../../src/dishes/infrastructure/control
 import { DishRequest } from '../../../../../src/dishes/infrastructure/controllers/dtos/dishRequest.dto';
 import { DishIdDto } from '../../../../../src/dishes/infrastructure/controllers/dtos/dishIdDto.dto';
 import { Dish } from '../../../../../src/dishes/domain/models/dish.model';
-import { VALID_DISH, VALID_DISH_NO_ID_NO_RESTAURANT_ID_CATEGORY, VALID_DISH_PARTIAL } from '../../mocks/dish.mock';
+import { VALID_DISH, VALID_DISH_NO_ID_NO_RESTAURANT_ID_CATEGORY } from '../../mocks/dish.mock';
 import { VALID_DISH_REQUEST } from '../../mocks/dishRequest.mock';
 import { VALID_DISH_ID_DTO } from '../../mocks/dishIdDto.mock';
 import { DishUpdate } from '../../../../../src/dishes/infrastructure/controllers/dtos/dishUpdate.dto';
 import { VALID_DISH_UPDATE } from '../../mocks/dishUpdate.mock';
+import { QUERY_OPTIONS } from '../../mocks/queryOptionsDto.mock';
+import { QueryOptionsDto } from 'src/dishes/infrastructure/controllers/dtos/queryOptions.dto';
+import { VALID_DISH_RESPONSE } from '../../mocks/dishResponse.mock';
+import { DishResponse } from '../../../../../src/dishes/infrastructure/controllers/dtos/dishResponse.dto';
 
 describe('Dish Controller', () => {
     let dishController: DishController;
     let createDishUseCase: any;
     let modifyDishUseCase: any;
     let activateDeactivateDishUseCase: any;
+    let getDishesUseCase: any;
     let dishRequestMapper: any;
     let dishIdDtoMapper: any;
     let dishUpdateMapper: any;
+    let dishResponseMapper: any;
+    let queryOptionsDtoMapper: any;
 
     beforeEach(() => {
         createDishUseCase = {
@@ -28,6 +35,9 @@ describe('Dish Controller', () => {
             activateDish: jest.fn(),
             deactivateDish: jest.fn()
         };
+        getDishesUseCase = {
+            getDishes: jest.fn()
+        };
         dishRequestMapper = {
             toDish: jest.fn(),
         };
@@ -37,10 +47,18 @@ describe('Dish Controller', () => {
         dishUpdateMapper = {
             toDishPartial: jest.fn(),
         };
-        dishController = new DishController(createDishUseCase, modifyDishUseCase, activateDeactivateDishUseCase);
+        dishResponseMapper = {
+            toDishResponseList: jest.fn(),
+        };
+        queryOptionsDtoMapper = {
+            toQueryOptions: jest.fn(),
+        };
+        dishController = new DishController(createDishUseCase, modifyDishUseCase, activateDeactivateDishUseCase, getDishesUseCase);
         (dishController as any).dishRequestMapper = dishRequestMapper;
         (dishController as any).dishIdDtoMapper = dishIdDtoMapper;
         (dishController as any).dishUpdateMapper = dishUpdateMapper;
+        (dishController as any).dishResponseMapper = dishResponseMapper;
+        (dishController as any).queryOptionsDtoMapper = queryOptionsDtoMapper;
     });
 
     describe('POST /dishes (create dish)', () => {
@@ -102,6 +120,26 @@ describe('Dish Controller', () => {
                 await dishController.deactivateDish('id', request);
 
                 expect(activateDeactivateDishUseCase.deactivateDish).toHaveBeenCalledWith('id', 'userid');
+            });
+        });
+    });
+    
+    describe('GET /dishes/restaurant/:id (get dishes of a restaurant)', () => {
+        describe('Success', () => {
+            it('should get dishes', async () => {
+                const queryOptions: QueryOptionsDto = QUERY_OPTIONS;
+                const expectedDishResponse: DishResponse = VALID_DISH_RESPONSE;
+    
+                jest.spyOn(queryOptionsDtoMapper, 'toQueryOptions').mockReturnValue({ ... queryOptions });
+                jest.spyOn(getDishesUseCase, 'getDishes').mockResolvedValue([ VALID_DISH ]);
+                jest.spyOn(dishResponseMapper, 'toDishResponseList').mockReturnValue([ expectedDishResponse ]);
+
+                const result = await dishController.getDishes('id', queryOptions);
+
+                expect(result).toEqual([ expectedDishResponse ]);
+                expect(queryOptionsDtoMapper.toQueryOptions).toHaveBeenCalledWith(queryOptions);
+                expect(getDishesUseCase.getDishes).toHaveBeenCalledWith('id', queryOptions.page, queryOptions.limit, queryOptions.category);
+                expect(dishResponseMapper.toDishResponseList).toHaveBeenCalledWith([ VALID_DISH ]);
             });
         });
     });

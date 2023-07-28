@@ -39,6 +39,20 @@ describe('Dish Entity Mapper', () => {
         });
     });
 
+    describe('toDishList', () => {
+        it('should map DishEntityList to DishList', () => {
+            const dishEntityList: DishEntity[] = [ VALID_DISH_ENTITY ];
+            const expectedDishList: Dish[] = [ VALID_DISH ];
+      
+            jest.spyOn(categoryEntityMapper, 'toCategory').mockReturnValue(VALID_DISH.category);
+            jest.spyOn(restaurantEntityMapper, 'toRestaurant').mockReturnValue(VALID_DISH.restaurant);
+
+            const dishList = dishEntityMapper.toDishList(dishEntityList);
+
+            expect(dishList).toEqual(expectedDishList);
+        });
+    });
+
     describe('toDishEntity', () => {
         it('should map Dish to DishEntity', () => {
             const dish: Dish = VALID_DISH_NO_ID;

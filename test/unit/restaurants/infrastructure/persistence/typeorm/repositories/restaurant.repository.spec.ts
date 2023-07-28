@@ -46,7 +46,7 @@ describe('Restaurant Repository', () => {
 
         describe('findAll', () => {
             it('should get all the restaurants', async () => {
-                const expectedRestaurantEntityList: RestaurantEntity[] = [VALID_RESTAURANT_ENTITY];
+                const expectedRestaurantEntityList: RestaurantEntity[] = [ VALID_RESTAURANT_ENTITY ];
 
                 jest.spyOn(entityRepository, 'find').mockResolvedValue(expectedRestaurantEntityList);
 

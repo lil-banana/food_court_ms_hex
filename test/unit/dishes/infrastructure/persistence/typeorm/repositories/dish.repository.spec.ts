@@ -10,7 +10,8 @@ describe('Dish Repository', () => {
         entityRepository = {
             save: jest.fn(),
             findOneBy: jest.fn(),
-            update: jest.fn()
+            update: jest.fn(),
+            find: jest.fn()
         };
         dishRepository = new DishRepository(entityRepository);
     });
@@ -40,6 +41,19 @@ describe('Dish Repository', () => {
     
                 expect(result).toBe(expectedDishEntity);
                 expect(entityRepository.findOneBy).toHaveBeenCalledWith({ id: expectedDishEntity.id });
+            });
+        });
+        
+        describe('findAll', () => {
+            it('should get all the dishes', async () => {
+                const expectedDishEntityList: DishEntity[] = [ VALID_DISH_ENTITY ];
+
+                jest.spyOn(entityRepository, 'find').mockResolvedValue(expectedDishEntityList);
+
+                const result = await dishRepository.findAll('id', 1, 2, 'category');
+
+                expect(result).toBe(expectedDishEntityList);
+                expect(entityRepository.find).toHaveBeenCalledWith({ skip: 1, take: 2, where: { active: true, restaurant: { id: 'id' }, category: { name: 'category' } } });
             });
         });
     });
