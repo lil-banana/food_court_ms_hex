@@ -39,7 +39,7 @@ export class RestaurantController {
 
     @Get()
     @UseGuards(ClientGuard)
-    @ApiResponse({ status: 200, description: 'Lists restaurants', type: RestaurantIdDto })
+    @ApiResponse({ status: 200, description: 'Lists restaurants'})
     async getRestaurants(@Query() paginationDto: PaginationDto): Promise<RestaurantResponse[]> {
         const { page, limit } = this.paginationDtoMapper.toPagination(paginationDto);
         return this.restaurantResponseMapper.toRestaurantResponseList( await this.getRestaurantsUseCase.getRestaurants(page, limit) );
