@@ -1,4 +1,4 @@
-import { Inject, Body, Controller, Post, Patch, UseFilters, Param, ValidationPipe, UseGuards, Request } from '@nestjs/common';
+import { Inject, Body, Controller, Post, Patch, UseFilters, Param, ValidationPipe, UseGuards, Request, Get, Query } from '@nestjs/common';
 import { ApiTags, ApiResponse } from '@nestjs/swagger';
 import { Dish } from '../../domain/models/dish.model';
 import { DishRequest } from './dtos/dishRequest.dto';
@@ -12,6 +12,12 @@ import { DishUpdate } from './dtos/dishUpdate.dto';
 import { DishUpdateMapper } from './mappers/dishUpdate.mapper';
 import { OwnerGuard } from '../../../auth/infrastructure/controllers/guards/owner.guard';
 import { ACTIVATE_DEACTIVATE_DISH_USE_CASE, IActivateDeactivateDishUseCase } from '../../domain/interfaces/activateDeactivateDish.interface';
+import { QueryOptionsDto } from './dtos/queryOptions.dto';
+import { QueryOptionsDtoMapper } from './mappers/queryOptions.mapper';
+import { DishResponse } from './dtos/dishResponse.dto';
+import { DishResponseMapper } from './mappers/dishReponse.mapper';
+import { ClientGuard } from '../../../auth/infrastructure/controllers/guards/client.guard';
+import { GET_DISHES_USE_CASE, IGetDishesUseCase } from '../../domain/interfaces/getDishes.interface';
 
 @ApiTags('dishes')
 @Controller('dishes')
@@ -20,11 +26,14 @@ export class DishController {
     private readonly dishRequestMapper = new DishRequestMapper();
     private readonly dishIdDtoMapper = new DishIdDtoMapper();
     private readonly dishUpdateMapper = new DishUpdateMapper();
+    private readonly dishResponseMapper = new DishResponseMapper();
+    private readonly queryOptionsDtoMapper = new QueryOptionsDtoMapper();
 
     constructor(
         @Inject(CREATE_DISH_USE_CASE) private readonly createDishUseCase: ICreateDishUseCase,
         @Inject(MODIFY_DISH_USE_CASE) private readonly modifyDishUseCase: IModifyDishUseCase,
-        @Inject(ACTIVATE_DEACTIVATE_DISH_USE_CASE) private readonly activateDeactivateDishUseCase: IActivateDeactivateDishUseCase
+        @Inject(ACTIVATE_DEACTIVATE_DISH_USE_CASE) private readonly activateDeactivateDishUseCase: IActivateDeactivateDishUseCase,
+        @Inject(GET_DISHES_USE_CASE) private readonly getDishesUseCase: IGetDishesUseCase
     ) { }
 
     @Post()
@@ -56,5 +65,13 @@ export class DishController {
     @ApiResponse({ status: 200, description: 'Deactivates a dish' })
     async deactivateDish(@Param('id') dishId: string, @Request() request: any): Promise<void> {
         await this.activateDeactivateDishUseCase.deactivateDish(dishId, request.user.userId);
+    }
+
+    @Get('restaurant/:id')
+    @UseGuards(ClientGuard)
+    @ApiResponse({ status: 200, description: 'Lists Dishes' })
+    async getDishes(@Param('id') restaurantId: string, @Query() queryOptions: QueryOptionsDto): Promise<DishResponse[]> {
+        const { page, limit, category } = this.queryOptionsDtoMapper.toQueryOptions(queryOptions);
+        return this.dishResponseMapper.toDishResponseList( await this.getDishesUseCase.getDishes(restaurantId, page, limit, category) );
     }
 }

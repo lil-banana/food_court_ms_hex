@@ -31,4 +31,14 @@ export class DishAdapter implements DishPersistencePort {
         }
         return this.dishEntityMapper.toDish(dishEntity);
     }
+
+    async getDishes(restaurantId: string, page: number, limit: number, category: string): Promise<Dish[]> {
+        try {
+            const skip = (page - 1) * limit;
+            return this.dishEntityMapper.toDishList(await this.dishRepository.findAll(restaurantId, skip, limit, category));
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
 }

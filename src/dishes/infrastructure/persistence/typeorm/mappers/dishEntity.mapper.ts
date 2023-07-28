@@ -21,6 +21,10 @@ export class DishEntityMapper {
         return dish;
     }
 
+    toDishList(dishEntityList: DishEntity[]): Dish[] {
+        return dishEntityList.map(dishEntity => this.toDish(dishEntity));
+    }
+
     toDishEntity(dish: Dish): DishEntity {
         const dishEntity: DishEntity = new DishEntity();
         dishEntity.id = dish.id;
