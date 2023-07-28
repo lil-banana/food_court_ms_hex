@@ -14,7 +14,9 @@ import { MODIFY_DISH_USE_CASE } from './domain/interfaces/modifyDish.interface';
 import { ModifyDishUseCase } from './application/usecases/modifyDish.usecase';
 import { ACTIVATE_DEACTIVATE_DISH_USE_CASE } from './domain/interfaces/activateDeactivateDish.interface';
 import { ActivateDeactivateDishUseCase } from './application/usecases/activateDeactivateDish.usecase';
-import { AuthModule } from 'src/auth/auth.module';
+import { AuthModule } from '../auth/auth.module';
+import { GET_DISHES_USE_CASE } from './domain/interfaces/getDishes.interface';
+import { GetDishesUseCase } from './application/usecases/getDishes.usecase';
 
 @Module({
     imports: [
@@ -43,6 +45,10 @@ import { AuthModule } from 'src/auth/auth.module';
         {
             provide: ACTIVATE_DEACTIVATE_DISH_USE_CASE,
             useClass: ActivateDeactivateDishUseCase,
+        },
+        {
+            provide: GET_DISHES_USE_CASE,
+            useClass: GetDishesUseCase,
         }
     ]
 })

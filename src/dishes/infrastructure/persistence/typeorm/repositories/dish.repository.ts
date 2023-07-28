@@ -17,4 +17,19 @@ export class DishRepository {
     findOneById(id: string): Promise<DishEntity | null> {
         return this.dishRepository.findOneBy({ id });
     }
+
+    findAll(restaurantId: string, skip: number, take: number, category: string): Promise<DishEntity[]> {
+        const options: any = {
+            take,
+            skip,
+            where: {
+                active: true,
+                restaurant: { id: restaurantId } 
+            }
+        };
+        if (category) {
+            options.where.category = { name: category };
+        }
+        return this.dishRepository.find(options);
+    }
 }

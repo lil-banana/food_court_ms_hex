@@ -19,6 +19,7 @@ describe('Pagination Dto Mapper', () => {
                 expect(page).toEqual(pagination.page);
                 expect(limit).toEqual(pagination.limit);
             });
+            
             it('should map PaginationDto to Pagination with default values', () => {
                 const pagination: PaginationDto = new PaginationDto();
     
