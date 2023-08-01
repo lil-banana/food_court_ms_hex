@@ -1,0 +1,1 @@
+export class AlreadyHasActiveOrderException extends Error {}

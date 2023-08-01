@@ -4,12 +4,20 @@ import { OTHER_RESTAURANT, VALID_RESTAURANT } from '../../mocks/restaurant.mock'
 describe('Restaurant Model', () => {
     describe('Success', () => {
         it('should create a new restaurant with valid arguments', () => {
-            const restaurant: Restaurant = new Restaurant(VALID_RESTAURANT.id, VALID_RESTAURANT.name, VALID_RESTAURANT.nit, VALID_RESTAURANT.address, VALID_RESTAURANT.telephoneNumber, VALID_RESTAURANT.logoUrl, VALID_RESTAURANT.ownerId);
+            const restaurant: Restaurant = new Restaurant(VALID_RESTAURANT.id, VALID_RESTAURANT.address, VALID_RESTAURANT.logoUrl, VALID_RESTAURANT.ownerId, VALID_RESTAURANT.name, VALID_RESTAURANT.nit, VALID_RESTAURANT.telephoneNumber);
             expect(restaurant.id).toBe(VALID_RESTAURANT.id);
+            expect(restaurant.address).toBe(VALID_RESTAURANT.address);
+            expect(restaurant.logoUrl).toEqual(VALID_RESTAURANT.logoUrl);
+            expect(restaurant.ownerId).toBe(VALID_RESTAURANT.ownerId);
             expect(restaurant.name).toBe(VALID_RESTAURANT.name);
             expect(restaurant.nit).toBe(VALID_RESTAURANT.nit);
-            expect(restaurant.address).toBe(VALID_RESTAURANT.address);
             expect(restaurant.telephoneNumber).toBe(VALID_RESTAURANT.telephoneNumber);
+        });
+
+        it('should create a new restaurant with valid arguments when no given optional parameters', () => {
+            const restaurant: Restaurant = new Restaurant(VALID_RESTAURANT.id, VALID_RESTAURANT.address, VALID_RESTAURANT.logoUrl, VALID_RESTAURANT.ownerId);
+            expect(restaurant.id).toBe(VALID_RESTAURANT.id);
+            expect(restaurant.address).toBe(VALID_RESTAURANT.address);
             expect(restaurant.logoUrl).toEqual(VALID_RESTAURANT.logoUrl);
             expect(restaurant.ownerId).toBe(VALID_RESTAURANT.ownerId);
         });

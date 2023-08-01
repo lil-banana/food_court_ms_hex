@@ -11,11 +11,11 @@ export class DishEntityMapper {
         const dish: Dish = new Dish(
             dishEntity.id,
             dishEntity.name,
-            dishEntity.price,
             dishEntity.description,
             dishEntity.imageUrl,
-            this.categoryEntityMapper.toCategory(dishEntity.category),
-            this.restaurantEntityMapper.toRestaurant(dishEntity.restaurant),
+            dishEntity.category ? this.categoryEntityMapper.toCategory(dishEntity.category): undefined,
+            dishEntity.restaurant ? this.restaurantEntityMapper.toRestaurant(dishEntity.restaurant): undefined,
+            dishEntity.price,
             dishEntity.active
         );
         return dish;
@@ -32,8 +32,8 @@ export class DishEntityMapper {
         dishEntity.price = dish.price;
         dishEntity.description = dish.description;
         dishEntity.imageUrl = dish.imageUrl;
-        dishEntity.category = this.categoryEntityMapper.toCategoryEntity(dish.category);
-        dishEntity.restaurant = this.restaurantEntityMapper.toRestaurantEntity(dish.restaurant);
+        dishEntity.category = dish.category ? this.categoryEntityMapper.toCategoryEntity(dish.category): undefined;
+        dishEntity.restaurant = dish. restaurant ? this.restaurantEntityMapper.toRestaurantEntity(dish.restaurant): undefined;
         dishEntity.active = dish.active;
         return dishEntity;
     }
