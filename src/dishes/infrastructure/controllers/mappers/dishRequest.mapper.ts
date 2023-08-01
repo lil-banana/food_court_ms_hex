@@ -7,11 +7,11 @@ export class DishRequestMapper {
         const dish: Dish = new Dish(
             undefined,
             dishRequest.name,
-            dishRequest.price,
             dishRequest.description,
             dishRequest.imageUrl,
             new Category(dishRequest.categoryId, undefined, undefined),
-            undefined
+            undefined,
+            dishRequest.price
         );
         return dish;
     }

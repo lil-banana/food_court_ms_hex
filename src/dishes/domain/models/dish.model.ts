@@ -12,15 +12,15 @@ export class Dish {
     private _restaurant: Restaurant;
     private _active: boolean;
 
-    constructor(id: string, name: string, price: number, description: string, imageUrl: string, category: Category, restaurant: Restaurant, active?: boolean) {
+    constructor(id: string, name: string, description: string, imageUrl: string, category: Category, restaurant: Restaurant, price?: number, active?: boolean) {
         this._id = id;
         this._name = name;
-        this._price = new DishPrice(price);
         this._description = description;
         this._imageUrl = imageUrl;
         this._category = category;
         this._restaurant = restaurant;
-        this._active = active ?? false;
+        this._price = price ? new DishPrice(price): undefined;
+        this._active = active ?? true;
     }
 
     get id(): string {
@@ -32,7 +32,7 @@ export class Dish {
     }
 
     get price(): number {
-        return this._price.value;
+        return this._price?.value;
     }
 
     set price(price: number) {

@@ -5,12 +5,12 @@ export class RestaurantRequestMapper {
     toRestaurant(restaurantRequest: RestaurantRequest): Restaurant {
         const restaurant: Restaurant = new Restaurant(
             undefined,
+            restaurantRequest.address,
+            restaurantRequest.logoUrl,
+            restaurantRequest.ownerId,
             restaurantRequest.name,
             restaurantRequest.nit,
-            restaurantRequest.address,
             restaurantRequest.telephoneNumber,
-            restaurantRequest.logoUrl,
-            restaurantRequest.ownerId
         );
         return restaurant;
     }
