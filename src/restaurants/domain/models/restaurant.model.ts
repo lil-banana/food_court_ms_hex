@@ -11,14 +11,14 @@ export class Restaurant {
     private _logoUrl: string;
     private _ownerId: string;
 
-    constructor(id: string, name: string, nit: string, address: string, telephoneNumber: string, logoUrl: string, ownerId: string) {
+    constructor(id: string, address: string, logoUrl: string, ownerId: string, name?: string, nit?: string, telephoneNumber?: string) {
         this._id = id;
-        this._name = new RestaurantName(name);
-        this._nit = new RestaurantNit(nit);
         this._address = address;
-        this._telephoneNumber = new RestaurantTelephoneNumber(telephoneNumber);
         this._logoUrl = logoUrl;
         this._ownerId = ownerId;
+        this._name = name ? new RestaurantName(name): undefined;
+        this._nit = nit ? new RestaurantNit(nit): undefined;
+        this._telephoneNumber = telephoneNumber ? new RestaurantTelephoneNumber(telephoneNumber): undefined;
     }
 
     get id(): string {
@@ -26,7 +26,7 @@ export class Restaurant {
     }
 
     get name(): string {
-        return this._name.value;
+        return this._name?.value;
     }
 
     set name(name: string) {
@@ -34,7 +34,7 @@ export class Restaurant {
     }
 
     get nit(): string {
-        return this._nit.value;
+        return this._nit?.value;
     }
 
     get address(): string {
@@ -46,7 +46,7 @@ export class Restaurant {
     }
 
     get telephoneNumber(): string {
-        return this._telephoneNumber.value;
+        return this._telephoneNumber?.value;
     }
 
     set telephoneNumber(telephoneNumber: string) {
