@@ -5,12 +5,12 @@ export class RestaurantEntityMapper {
     toRestaurant(restaurantEntity: RestaurantEntity): Restaurant {
         const restaurant: Restaurant = new Restaurant(
             restaurantEntity.id,
+            restaurantEntity.address,
+            restaurantEntity.logoUrl,
+            restaurantEntity.ownerId,
             restaurantEntity.name,
             restaurantEntity.nit,
-            restaurantEntity.address,
-            restaurantEntity.telephoneNumber,
-            restaurantEntity.logoUrl,
-            restaurantEntity.ownerId
+            restaurantEntity.telephoneNumber
         );
         return restaurant;
     }

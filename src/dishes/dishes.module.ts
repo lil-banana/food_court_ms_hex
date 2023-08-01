@@ -50,6 +50,7 @@ import { GetDishesUseCase } from './application/usecases/getDishes.usecase';
             provide: GET_DISHES_USE_CASE,
             useClass: GetDishesUseCase,
         }
-    ]
+    ],
+    exports: [ DISH_PERSISTENCE_PORT ]
 })
 export class DishesModule { }

@@ -24,3 +24,15 @@ export const VALID_RESTAURANT_ENTITY_NO_ID: RestaurantEntity = {
     createdAt: undefined,
     updatedAt: undefined
 }
+
+export const VALID_RESTAURANT_ENTITY_ONLY_ID: RestaurantEntity = {
+    id: VALID_RESTAURANT.id,
+    name: undefined,
+    nit: undefined,
+    address: undefined,
+    telephoneNumber: undefined,
+    logoUrl: undefined,
+    ownerId: undefined,
+    createdAt: undefined,
+    updatedAt: undefined
+}

@@ -1,8 +1,8 @@
 import { Dish } from '../../../../../../../src/dishes/domain/models/dish.model';
 import { DishEntity } from '../../../../../../../src/dishes/infrastructure/persistence/typeorm/entities/dish.entity';
 import { DishEntityMapper } from '../../../../../../../src/dishes/infrastructure/persistence/typeorm/mappers/dishEntity.mapper';
-import { VALID_DISH_ENTITY, VALID_DISH_ENTITY_NO_ID } from '../../../../mocks/dishEntity.mock';
-import { VALID_DISH, VALID_DISH_NO_ID } from '../../../../mocks/dish.mock';
+import { VALID_DISH_ENTITY, VALID_DISH_ENTITY_NO_ID, VALID_DISH_ENTITY_ONLY_ID } from '../../../../mocks/dishEntity.mock';
+import { VALID_DISH, VALID_DISH_NO_ID, VALID_DISH_ONLY_ID } from '../../../../mocks/dish.mock';
 
 describe('Dish Entity Mapper', () => {
     let dishEntityMapper: DishEntityMapper;
@@ -37,6 +37,15 @@ describe('Dish Entity Mapper', () => {
             expect(categoryEntityMapper.toCategory).toHaveBeenCalledWith(dishEntity.category);
             expect(restaurantEntityMapper.toRestaurant).toHaveBeenCalledWith(dishEntity.restaurant);
         });
+
+        it('should map DishEntity to Dish when only is given the id', () => {
+            const dishEntity: DishEntity = VALID_DISH_ENTITY_ONLY_ID;
+            const expectedDish: Dish = VALID_DISH_ONLY_ID;
+
+            const dish = dishEntityMapper.toDish(dishEntity);
+
+            expect(dish).toEqual(expectedDish);
+        });
     });
 
     describe('toDishList', () => {
@@ -66,6 +75,15 @@ describe('Dish Entity Mapper', () => {
             expect(dishEntity).toEqual(expectedDishEntity);
             expect(categoryEntityMapper.toCategoryEntity).toHaveBeenCalledWith(dish.category);
             expect(restaurantEntityMapper.toRestaurantEntity).toHaveBeenCalledWith(dish.restaurant);
+        });
+        
+        it('should map Dish to DishEntity when only is given the id', () => {
+            const dish: Dish = VALID_DISH_ONLY_ID;
+            const expectedDishEntity: DishEntity = VALID_DISH_ENTITY_ONLY_ID;
+
+            const dishEntity = dishEntityMapper.toDishEntity(dish);
+
+            expect(dishEntity).toEqual(expectedDishEntity);
         });
     });
 });
