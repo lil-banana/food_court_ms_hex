@@ -31,4 +31,14 @@ export class OrderAdapter implements OrderPersistencePort {
             throw e;
         }
     }
+
+    async getOrders(ownerId: string, status: string, page: number, limit: number): Promise<Order[]> {
+        try {
+            const skip = (page - 1) * limit;
+            return this.orderEntityMapper.toOrderList(await this.orderRepository.findAll(ownerId, status, skip, limit));
+        } catch (e) {
+            console.error(e);
+            throw e;
+        }
+    }
 }

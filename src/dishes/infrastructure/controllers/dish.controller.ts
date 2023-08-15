@@ -70,7 +70,7 @@ export class DishController {
     @Get('restaurant/:id')
     @UseGuards(ClientGuard)
     @ApiResponse({ status: 200, description: 'Lists Dishes' })
-    async getDishes(@Param('id') restaurantId: string, @Query() queryOptions: QueryOptionsDto): Promise<DishResponse[]> {
+    async getDishes(@Param('id') restaurantId: string, @Query(ValidationPipe) queryOptions: QueryOptionsDto): Promise<DishResponse[]> {
         const { page, limit, category } = this.queryOptionsDtoMapper.toQueryOptions(queryOptions);
         return this.dishResponseMapper.toDishResponseList( await this.getDishesUseCase.getDishes(restaurantId, page, limit, category) );
     }

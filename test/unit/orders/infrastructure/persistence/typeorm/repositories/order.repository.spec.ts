@@ -42,5 +42,18 @@ describe('Order Repository', () => {
                 expect(entityRepository.find).toHaveBeenCalledWith({ where: { clientId: 'id', status: Not(In([ 'cancelled', 'delivered' ])) } });
             });
         });
+        
+        describe('findAll', () => {
+            it('should get the orders for a restaurant with given owner id and filtered with an status', async () => {
+                const expectedOrderEntityList: OrderEntity[] = [ VALID_ORDER_ENTITY ];
+
+                jest.spyOn(entityRepository, 'find').mockResolvedValue(expectedOrderEntityList);
+
+                const result = await orderRepository.findAll('ownerId', 'pending', 1, 2);
+
+                expect(result).toBe(expectedOrderEntityList);
+                expect(entityRepository.find).toHaveBeenCalledWith({ skip: 1, take: 2, where: { restaurant: { ownerId: 'ownerId'}, status: 'pending' } });
+            });
+        });
     });
 });
