@@ -10,7 +10,9 @@ import { ORDER_PERSISTENCE_PORT } from './domain/repositories/order.repository';
 import { CreateOrderUseCase } from './application/usecases/createOrder.usecase';
 import { CREATE_ORDER_USE_CASE } from './domain/interfaces/createOrder.interface';
 import { OrderRepository } from './infrastructure/persistence/typeorm/repositories/order.repository';
-import { DishesModule } from 'src/dishes/dishes.module';
+import { DishesModule } from '../dishes/dishes.module';
+import { GetOrdersUseCase } from './application/usecases/getOrders.usecase';
+import { GET_ORDERS_USE_CASE } from './domain/interfaces/getOrders.interface';
 
 @Module({
     imports: [
@@ -29,6 +31,10 @@ import { DishesModule } from 'src/dishes/dishes.module';
         {
             provide: CREATE_ORDER_USE_CASE,
             useClass: CreateOrderUseCase,
+        },
+        {
+            provide: GET_ORDERS_USE_CASE,
+            useClass: GetOrdersUseCase,
         }
     ]
 })
