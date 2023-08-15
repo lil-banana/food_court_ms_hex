@@ -23,3 +23,13 @@ steps:
 - script: |
     npm test -- --coverage
   displayName: 'Run Tests and Coverage'
+
+- script: |
+    echo $(AWS_ECR_PASSWORD) | docker login $(AWS_ECR_REGISTRY) -u $(AWS_ECR_USERNAME) --password-stdin
+    docker build -t food-court-ms:$(Build.BuildNumber) .
+    docker tag food-court-ms:$(Build.BuildNumber) $(AWS_ECR_REGISTRY)/food-court-ms:$(Build.BuildNumber)
+  displayName: 'Authenticate and Build Docker Image'
+
+- script: |
+    docker push $(AWS_ECR_REGISTRY)/food-court-ms:$(Build.BuildNumber)
+  displayName: 'Push Docker Image to AWS ECR'
