@@ -1,0 +1,51 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: AWS ECR
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    pip install awscli
+  displayName: 'Install AWS CLI'
+  
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+  
+- script: |
+    npm test -- --coverage
+  displayName: 'Run Tests and Coverage'
+
+- script: |
+    aws configure set aws_access_key_id "$AWS_ECR_IAM_KEY"
+    aws configure set aws_secret_access_key "$AWS_ECR_IAM_PASSWORD"
+    aws configure set region "$AWS_ECR_REGION"
+  displayName: 'Configure AWS CLI'
+
+- script: |
+    aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
+    docker build -t food-court-ms:"$BUILD_BUILDNUMBER" .
+    docker tag food-court-ms:"$BUILD_BUILDNUMBER" "$AWS_ECR_REGISTRY"/food-court-ms:"$BUILD_BUILDNUMBER"
+    aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
+    docker push "$AWS_ECR_REGISTRY"/food-court-ms:"$BUILD_BUILDNUMBER"
+  displayName: 'Build, Tag, and Push Docker Image to ECR'
