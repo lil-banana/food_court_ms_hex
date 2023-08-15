@@ -12,10 +12,12 @@ describe('Order Adapter', () => {
     beforeEach(() => {
         orderRepository = {
             save: jest.fn(),
-            getActiveOrderByClient: jest.fn()
+            getActiveOrderByClient: jest.fn(),
+            findAll: jest.fn()
         };
         orderEntityMapper = {
-            toOrderEntity: jest.fn()
+            toOrderEntity: jest.fn(),
+            toOrderList: jest.fn()
         };
         orderAdapter = new OrderAdapter(orderRepository);
         (orderAdapter as any).orderEntityMapper = orderEntityMapper;
@@ -84,6 +86,33 @@ describe('Order Adapter', () => {
                 jest.spyOn(orderRepository, 'getActiveOrderByClient').mockRejectedValue(new Error());
 
                 await expect(orderAdapter.checkActiveOrderByClient('id')).rejects.toThrow(Error);
+            });
+        });
+    });
+    
+    describe('getOrders', () => {
+        describe('Success', () => {
+            it('should return orders', async () => {
+                const expectedOrderEntityList: OrderEntity[] = [VALID_ORDER_ENTITY];
+                const expectedOrderList: Order[] = [VALID_ORDER];
+
+                jest.spyOn(orderRepository, 'findAll').mockResolvedValue(expectedOrderEntityList);
+                jest.spyOn(orderEntityMapper, 'toOrderList').mockReturnValue(expectedOrderList);
+                
+                const result = await orderAdapter.getOrders('ownerId', 'pending', 1, 10);
+
+                expect(result).toEqual(expectedOrderList);
+                expect(orderRepository.findAll).toHaveBeenCalledWith('ownerId', 'pending', 0, 10);
+                expect(orderEntityMapper.toOrderList).toHaveBeenCalledWith(expectedOrderEntityList);
+            });
+        });
+
+        describe('Failure', () => {
+            it('should throw an unexpected error', async () => {
+                jest.spyOn(console, 'error').mockImplementation(() => { });
+                jest.spyOn(orderRepository, 'findAll').mockRejectedValue(new Error());
+
+                await expect(orderAdapter.getOrders('ownerId', 'pending', 1, 10)).rejects.toThrow(Error);
             });
         });
     });

@@ -22,4 +22,16 @@ export class OrderRepository {
             }
         });
     }
+
+    findAll(ownerId: string, status: string, skip: number, take: number): Promise<OrderEntity[]> {
+        const options: any = {
+            skip,
+            take,
+            where: {
+                restaurant: { ownerId },
+                status
+            }
+        };
+        return this.orderRepository.find(options);
+    }
 }
