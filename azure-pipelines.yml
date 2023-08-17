@@ -45,7 +45,7 @@ steps:
 - script: |
     aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
     docker build -t food-court-ms:latest .
-    docker tag food-court-ms:"$BUILD_BUILDNUMBER" "$AWS_ECR_REGISTRY"/food-court-ms:latest
+    docker tag food-court-ms:latest "$AWS_ECR_REGISTRY"/food-court-ms:latest
     aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
     docker push "$AWS_ECR_REGISTRY"/food-court-ms:latest
   displayName: 'Build, Tag, and Push Docker Image to ECR'
