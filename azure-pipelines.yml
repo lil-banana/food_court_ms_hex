@@ -43,18 +43,15 @@ steps:
     aws configure set region "$AWS_ECR_REGION"
   displayName: 'Configure AWS CLI'
 
-- script: |
-    sed -i 's/#{PORT}#/"$PORT"/g' Dockerfile
-    sed -i 's/#{JWT_SECRET}#/"$JWT_SECRET"/g' Dockerfile
-    sed -i 's/#{DB_HOST}#/"$DB_HOST"/g' Dockerfile
-    sed -i 's/#{DB_PORT}#/"$DB_PORT"/g' Dockerfile
-    sed -i 's/#{DB_USERNAME}#/"$DB_USERNAME"/g' Dockerfile
-    sed -i 's/#{DB_PASSWORD}#/"$DB_PASSWORD"/g' Dockerfile
-    sed -i 's/#{DB_DATABASE}#/"$DB_DATABASE"/g' Dockerfile
-    cat Dockerfile
-  displayName: 'Replace environment variables in Dockerfile'
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Replace tokens in Dockerfile'
+  inputs:
+    rootDirectory: .
+    targetFiles: |
+      Dockerfile  # Specify the name of the Dockerfile or a pattern if needed
 
 - script: |
+    cat Dockerfile
     aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
     docker build -t food-court-ms:latest .
     docker tag food-court-ms:latest "$AWS_ECR_REGISTRY"/food-court-ms:latest
