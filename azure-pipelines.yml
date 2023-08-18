@@ -15,11 +15,6 @@ variables:
 
 steps:
 - script: |
-    curl -X POST -H "Content-Type: application/json" -d '{"text": "Pipeline failed!"}' "$GOOGLE_CHAT_WEBHOOK"
-  displayName: 'Send Notification to Google Chat'
-  condition: failed()
-
-- script: |
     echo "This step will intentionally fail"
     exit 1
     displayName: 'Force Failure'
@@ -97,3 +92,8 @@ steps:
     docker push "$AWS_ECR_REGISTRY"/food-court-ms:latest
     aws ecs update-service --cluster food-court-cluster --service food-court-s --force-new-deployment
   displayName: 'Build, Tag, and Push Docker Image to ECR'
+
+- script: |
+    curl -X POST -H "Content-Type: application/json" -d '{"text": "Pipeline failed!"}' "$GOOGLE_CHAT_WEBHOOK"
+  displayName: 'Send Notification to Google Chat'
+  condition: failed()
