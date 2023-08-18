@@ -11,7 +11,7 @@ export class GetOrdersUseCase implements IGetOrdersUseCase {
 
     async getOrders(ownerId: string, status: string, page: number, limit: number): Promise<Order[]> {
         try {
-            return this.orderRepository.getOrders(ownerId, status, page, limit);
+            return await this.orderRepository.getOrders(ownerId, status, page, limit);
         }
         catch (e) {
             console.error(e);

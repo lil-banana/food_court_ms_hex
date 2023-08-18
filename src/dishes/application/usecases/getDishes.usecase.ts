@@ -11,7 +11,7 @@ export class GetDishesUseCase implements IGetDishesUseCase {
 
     async getDishes(restaurantId: string, page: number, limit: number, category: string): Promise<Dish[]> {
         try {
-            return this.dishRepository.getDishes(restaurantId, page, limit, category);
+            return await this.dishRepository.getDishes(restaurantId, page, limit, category);
         }
         catch (e) {
             console.error(e);
