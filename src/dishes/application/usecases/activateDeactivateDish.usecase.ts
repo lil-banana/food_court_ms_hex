@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DISH_PERSISTENCE_PORT, DishPersistencePort } from '../../domain/repositories/dish.repository';
-import { Dish } from '../../domain/models/dish.model';
 import { IActivateDeactivateDishUseCase } from '../../domain/interfaces/activateDeactivateDish.interface';
 import { OwnerDoesNotMatchException } from '../exceptions/ownerDoesNotMatch.exception';
 
