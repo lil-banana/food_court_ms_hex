@@ -51,6 +51,7 @@ steps:
     sed -i 's/#{DB_USERNAME}#/"$DB_USERNAME"/g' Dockerfile
     sed -i 's/#{DB_PASSWORD}#/"$DB_PASSWORD"/g' Dockerfile
     sed -i 's/#{DB_DATABASE}#/"$DB_DATABASE"/g' Dockerfile
+    cat Dockerfile
   displayName: 'Replace environment variables in Dockerfile'
 
 - script: |
