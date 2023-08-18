@@ -43,6 +43,36 @@ steps:
     aws configure set region "$AWS_ECR_REGION"
   displayName: 'Configure AWS CLI'
 
+- task: AmazonWebServices.aws-vsts-tools.SystemsManagerGetParameter.SystemsManagerGetParameter@1
+  displayName: 'Systems Manager Get Parameter: DB_HOST'
+  inputs:
+    awsCredentials: 'AWS'
+    regionName: 'us-east-2'
+    parameterName: 'DB_HOST'
+    parameterVersion: 1
+    singleNameTransform: custom
+    customVariableName: 'DB_HOST'
+    
+- task: AmazonWebServices.aws-vsts-tools.SystemsManagerGetParameter.SystemsManagerGetParameter@1
+  displayName: 'Systems Manager Get Parameter: DB_USERNAME'
+  inputs:
+    awsCredentials: 'AWS'
+    regionName: 'us-east-2'
+    parameterName: 'DB_USERNAME'
+    parameterVersion: 1
+    singleNameTransform: custom
+    customVariableName: 'DB_USERNAME'
+    
+- task: AmazonWebServices.aws-vsts-tools.SystemsManagerGetParameter.SystemsManagerGetParameter@1
+  displayName: 'Systems Manager Get Parameter: DB_PASSWORD'
+  inputs:
+    awsCredentials: 'AWS'
+    regionName: 'us-east-2'
+    parameterName: 'DB_PASSWORD'
+    parameterVersion: 1
+    singleNameTransform: custom
+    customVariableName: 'DB_PASSWORD'
+
 - task: qetza.replacetokens.replacetokens-task.replacetokens@3
   displayName: 'Replace tokens in Dockerfile'
   inputs:
