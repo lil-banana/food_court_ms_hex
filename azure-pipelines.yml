@@ -48,7 +48,7 @@ steps:
   inputs:
     rootDirectory: .
     targetFiles: |
-      Dockerfile  # Specify the name of the Dockerfile or a pattern if needed
+      Dockerfile
 
 - script: |
     cat Dockerfile
