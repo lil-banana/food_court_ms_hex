@@ -18,7 +18,12 @@ steps:
     curl -X POST -H "Content-Type: application/json" -d '{"text": "Pipeline failed!"}' "$GOOGLE_CHAT_WEBHOOK"
   displayName: 'Send Notification to Google Chat'
   condition: failed()
-  
+
+- script: |
+    echo "This step will intentionally fail"
+    exit 1
+    displayName: 'Force Failure'
+
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.x'
@@ -52,7 +57,7 @@ steps:
   displayName: 'Systems Manager Get Parameter: DB_HOST'
   inputs:
     awsCredentials: 'AWS'
-    regionName: 'us-east-2'
+    regionName: 'us-east-1'
     parameterName: 'DB_HOST'
     parameterVersion: 1
     singleNameTransform: custom
