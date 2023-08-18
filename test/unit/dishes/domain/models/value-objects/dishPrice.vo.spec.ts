@@ -14,20 +14,20 @@ describe('Dish Price Value Object', () => {
     describe('Failure', () => {
         it('should throw an error when creating a Dish Price with an undefined value', () => {
             expect(() => {
-                new DishPrice(undefined);
+                const _dishPrice = new DishPrice(undefined);
             }).toThrow(InvalidArgumentError);
         });
 
         it('should throw an error when creating a Dish Price with a null value', () => {
             expect(() => {
-                new DishPrice(null);
+                const _dishPrice = new DishPrice(null);
             }).toThrow(InvalidArgumentError);
         });
 
         it('should throw an error when creating a Dish Price with an invalid value', () => {
             const invalidPrice = 0;
             expect(() => {
-                new DishPrice(invalidPrice);
+                const _dishPrice = new DishPrice(invalidPrice);
             }).toThrow(InvalidArgumentError);
         });
     });
