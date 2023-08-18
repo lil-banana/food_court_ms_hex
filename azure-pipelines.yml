@@ -47,7 +47,7 @@ steps:
   displayName: 'Systems Manager Get Parameter: DB_HOST'
   inputs:
     awsCredentials: 'AWS'
-    regionName: 'us-east-2'
+    regionName: 'us-east-1'
     parameterName: 'DB_HOST'
     parameterVersion: 1
     singleNameTransform: custom
@@ -57,7 +57,7 @@ steps:
   displayName: 'Systems Manager Get Parameter: DB_USERNAME'
   inputs:
     awsCredentials: 'AWS'
-    regionName: 'us-east-2'
+    regionName: 'us-east-1'
     parameterName: 'DB_USERNAME'
     parameterVersion: 1
     singleNameTransform: custom
@@ -67,7 +67,7 @@ steps:
   displayName: 'Systems Manager Get Parameter: DB_PASSWORD'
   inputs:
     awsCredentials: 'AWS'
-    regionName: 'us-east-2'
+    regionName: 'us-east-1'
     parameterName: 'DB_PASSWORD'
     parameterVersion: 1
     singleNameTransform: custom
