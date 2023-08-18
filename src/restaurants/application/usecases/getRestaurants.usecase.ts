@@ -11,7 +11,7 @@ export class GetRestaurantsUseCase implements IGetRestaurantsUseCase {
 
     async getRestaurants(page: number, limit: number): Promise<Restaurant[]> {
         try {
-            return this.restaurantRepository.getRestaurants(page, limit);
+            return await this.restaurantRepository.getRestaurants(page, limit);
         }
         catch (e) {
             console.error(e);
