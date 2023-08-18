@@ -14,6 +14,11 @@ variables:
   - group: DOCKERFILE ENVS
 
 steps:
+- script: |
+    curl -X POST -H "Content-Type: application/json" -d '{"text": "Pipeline failed!"}' "$GOOGLE_CHAT_WEBHOOK"
+  displayName: 'Send Notification to Google Chat'
+  condition: failed()
+  
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.x'
@@ -47,7 +52,7 @@ steps:
   displayName: 'Systems Manager Get Parameter: DB_HOST'
   inputs:
     awsCredentials: 'AWS'
-    regionName: 'us-east-1'
+    regionName: 'us-east-2'
     parameterName: 'DB_HOST'
     parameterVersion: 1
     singleNameTransform: custom
@@ -80,7 +85,6 @@ steps:
     targetFiles: Dockerfile
 
 - script: |
-    cat Dockerfile
     aws ecr get-login-password --region "$AWS_ECR_REGION" | docker login --username AWS --password-stdin "$AWS_ECR_REGISTRY"
     docker build -t food-court-ms:latest .
     docker tag food-court-ms:latest "$AWS_ECR_REGISTRY"/food-court-ms:latest
