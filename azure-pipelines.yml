@@ -14,11 +14,6 @@ variables:
   - group: DOCKERFILE ENVS
 
 steps:
-- script: |
-    echo "This step will intentionally fail"
-    exit 1
-    displayName: 'Force Failure'
-
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '3.x'
