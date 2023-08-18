@@ -37,6 +37,25 @@ steps:
     npm test -- --coverage
   displayName: 'Run Tests and Coverage'
 
+- task: qetza.replacetokens.replacetokens-task.replacetokens@3
+  displayName: 'Replace tokens in sonar-project.properties'
+  inputs:
+    rootDirectory: .
+    targetFiles: sonar-project.properties
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare analysis on SonarCloud'
+  inputs:
+    SonarCloud: SONAR
+    organization: $(SONAR_ORG)
+    projectKey: $(SONAR_PROJECT_KEY)
+    scannerMode: CLI
+    configMode: file
+    configFile: sonar-project.properties
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud Analysis'
+
 - script: |
     aws configure set aws_access_key_id "$AWS_ECR_IAM_KEY"
     aws configure set aws_secret_access_key "$AWS_ECR_IAM_PASSWORD"
